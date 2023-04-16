@@ -73,6 +73,6 @@ class DataPreprocessor:
 
         for i, idx in enumerate(self.dataframe.index):
             self.dataframe.loc[idx].text = new_texts[i]
-            self.dataframe.loc[idx].extracted_part = new_annotations[i]
+            self.dataframe.loc[idx].extracted_part = new_annotations[i][0]
         return self.dataframe
         
