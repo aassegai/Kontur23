@@ -36,11 +36,12 @@ class DataPreprocessor:
                 temp_text = re.sub(r'[^\w\s]', ' ', temp_text)
             prep_text = ''
             for word in temp_text.split(): 
-                if word not in stopwords_rus:
-                    if self.lemmatize:
-                        prep_text = prep_text + '' + self.lemmatizer.parse(word)[0].normal_form + ' '
-                    else:
-                        prep_text = prep_text + '' + word + ' '
+                if self.remove_stopwords and word in stopwords_rus:
+                    pass
+                elif self.lemmatize:
+                    prep_text = prep_text + '' + self.lemmatizer.parse(word)[0].normal_form + ' '
+                else:
+                    prep_text = prep_text + '' + word + ' '
             # if self.for_rnn:
             #     prep_text = '<BOS>' + prep_text + '<EOS>'
             new_texts.append(prep_text)
