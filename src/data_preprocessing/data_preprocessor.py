@@ -4,20 +4,26 @@ import re
 import nltk
 nltk.download('wordnet')
 nltk.download('omw-1.4')
+nltk.download('stopwords')
+from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from tqdm.auto import tqdm 
+from pymorphy2 import MorphAnalyzer
 
-lemmatizer = WordNetLemmatizer()
+morph_analyzer = MorphAnalyzer()
+stopwords_rus = stopwords.words('russian')
 
 class DataPreprocessor:
-    def __init__(self, lemmatizer=lemmatizer,
+    def __init__(self, lemmatizer=morph_analyzer,
                  remove_punctuation=False,
                  lemmatize=True,
-                 for_rnn=False):
+                 for_rnn=False,
+                 remove_stopwords=True):
         self.lemmatizer = lemmatizer
         self.remove_punctuation = remove_punctuation
         self.lemmatize = lemmatize
         self.for_rnn = for_rnn
+        self.remove_stopwords = remove_stopwords
 
     def preprocess_text(self, texts, annotations):
         new_texts = []
@@ -28,10 +34,11 @@ class DataPreprocessor:
                 temp_text = re.sub(r'[^\w\s]', ' ', temp_text)
             prep_text = ''
             for word in temp_text.split(): 
-                if self.lemmatize:
-                    prep_text = prep_text + '' + self.lemmatizer.lemmatize(word) + ' '
-                else:
-                    prep_text = prep_text + '' + word + ' '
+                if word not in stopwords_rus:
+                    if self.lemmatize:
+                        prep_text = prep_text + '' + self.lemmatizer.parse(word)[0].normal_form + ' '
+                    else:
+                        prep_text = prep_text + '' + word + ' '
             # if self.for_rnn:
             #     prep_text = '<BOS>' + prep_text + '<EOS>'
             new_texts.append(prep_text)
@@ -45,10 +52,11 @@ class DataPreprocessor:
                 temp_segment = re.sub(r'[^\w\s]', ' ', temp_segment)
             prep_segment = ''
             for word in temp_segment.split():
-                if self.lemmatize:
-                    prep_segment = prep_segment + '' + self.lemmatizer.lemmatize(word) + ' '
-                else: 
-                    prep_segment = prep_segment + '' + word + ' '
+                if word not in stopwords_rus:
+                    if self.lemmatize:
+                        prep_segment = prep_segment + '' + self.lemmatizer.parse(word)[0].normal_form + ' '
+                    else: 
+                        prep_segment = prep_segment + '' + word + ' '
             prep_segment = prep_segment.strip()
             if self.for_rnn:
                 prep_segment = '<BOS>' + prep_segment + '<EOS>'
