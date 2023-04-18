@@ -12,13 +12,15 @@ from pymorphy2 import MorphAnalyzer
 
 morph_analyzer = MorphAnalyzer()
 stopwords_rus = stopwords.words('russian')
+punctuation_rus = ['«', '»', "''", '``', '„', '“', '..', '...', '—', '–', '…', '’', '№']
+stopwords_rus = stopwords_rus | punctuation_rus
 
 class DataPreprocessor:
     def __init__(self, lemmatizer=morph_analyzer,
                  remove_punctuation=False,
-                 lemmatize=True,
+                 lemmatize=False,
                  for_rnn=False,
-                 remove_stopwords=True):
+                 remove_stopwords=False):
         self.lemmatizer = lemmatizer
         self.remove_punctuation = remove_punctuation
         self.lemmatize = lemmatize
