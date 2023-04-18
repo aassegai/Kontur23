@@ -13,7 +13,7 @@ from pymorphy2 import MorphAnalyzer
 morph_analyzer = MorphAnalyzer()
 stopwords_rus = stopwords.words('russian')
 punctuation_rus = ['«', '»', "''", '``', '„', '“', '..', '...', '—', '–', '…', '’', '№']
-stopwords_rus = stopwords_rus | punctuation_rus
+stopwords_rus = set(stopwords_rus) | set(punctuation_rus)
 
 class DataPreprocessor:
     def __init__(self, lemmatizer=morph_analyzer,
