@@ -68,7 +68,8 @@ class DataPreprocessor:
                     if self.lemmatize:
                         prep_text = prep_text + '' + self.lemmatizer.parse(word)[0].normal_form + ' '
                     else:
-                        prep_text = prep_text + '' + word + ' '            prep_segment = prep_segment.strip()
+                        prep_text = prep_text + '' + word + ' '            
+            prep_segment = prep_segment.strip()
             if self.for_rnn:
                 prep_segment = '<BOS>' + prep_segment + '<EOS>'
             # print(prep_segment)
