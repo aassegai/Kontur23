@@ -21,6 +21,9 @@ def prepare_bin(df: pd.DataFrame, nlp=spacy.blank('ru'), mode='train', option=''
             filtered_ents = filter_spans(ents)
             doc.ents = filtered_ents 
         doc_bin.add(doc)
-    bin_name = option + mode + '_dataset.spacy'
+    if len(option) > 0:
+        bin_name = option + mode + '_dataset.spacy'
+    else:
+        bin_name = mode + '_dataset.spacy'
     doc_bin.to_disk(bin_name)
     print(f'{skipped_items} items had blank annotation and were skipped')
