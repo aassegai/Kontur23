@@ -35,9 +35,8 @@ class DataPreprocessor:
             if self.remove_punctuation:
                 temp_text = re.sub(r'[^\w\s]', ' ', temp_text)
             prep_text = ''
-            for word in temp_text.split(): 
-                if self.remove_stopwords and word in stopwords_rus:
-                    if word not in stopwords_rus:  
+            for word in temp_text.split():
+                if self.remove_stopwords and word not in stopwords_rus:  
                         if self.lemmatize:
                             prep_text = prep_text + '' + self.lemmatizer.parse(word)[0].normal_form + ' '
                         else:
