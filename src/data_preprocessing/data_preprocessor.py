@@ -59,12 +59,16 @@ class DataPreprocessor:
                 temp_segment = re.sub(r'[^\w\s]', ' ', temp_segment)
             prep_segment = ''
             for word in temp_segment.split():
-                if word not in stopwords_rus:
+                if self.remove_stopwords and word not in stopwords_rus:  
+                        if self.lemmatize:
+                            prep_text = prep_text + '' + self.lemmatizer.parse(word)[0].normal_form + ' '
+                        else:
+                            prep_text = prep_text + '' + word + ' '
+                else:  
                     if self.lemmatize:
-                        prep_segment = prep_segment + '' + self.lemmatizer.parse(word)[0].normal_form + ' '
-                    else: 
-                        prep_segment = prep_segment + '' + word + ' '
-            prep_segment = prep_segment.strip()
+                        prep_text = prep_text + '' + self.lemmatizer.parse(word)[0].normal_form + ' '
+                    else:
+                        prep_text = prep_text + '' + word + ' '            prep_segment = prep_segment.strip()
             if self.for_rnn:
                 prep_segment = '<BOS>' + prep_segment + '<EOS>'
             # print(prep_segment)
