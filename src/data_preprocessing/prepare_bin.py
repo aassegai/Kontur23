@@ -22,7 +22,7 @@ def prepare_bin(df: pd.DataFrame, nlp=spacy.blank('ru'), mode='train', option=''
             doc.ents = filtered_ents 
         doc_bin.add(doc)
     if len(option) > 0:
-        bin_name = option + mode + '_dataset.spacy'
+        bin_name = option + '_' + mode + '_dataset.spacy'
     else:
         bin_name = mode + '_dataset.spacy'
     doc_bin.to_disk(bin_name)
