@@ -26,12 +26,19 @@ class DataPreprocessor:
         self.lemmatize = lemmatize
         self.for_rnn = for_rnn
         self.remove_stopwords = remove_stopwords
-
+      
+    '''
+    This is data preprocessing module. Calling this class on your dataset
+    transforms the text inside to more appropriate for neural networks 
+    forms with chosen options: lower-case, remove punctuation and stopwords,
+    lemmatizing with pymorphy2's MorphAnalyzer. 
+    Also RNN technical tokens can be added.
+    '''
     def preprocess_text(self, texts, annotations):
         new_texts = []
         new_annotations = []
         for i in tqdm(texts.index):
-            temp_text = texts[i].strip().replace('\n', ' ').lower()
+            temp_text = texts[i].strip().replace('\n', ' ').lower().replace('ё', 'е')
             if self.remove_punctuation:
                 temp_text = re.sub(r'[^\w\s]', ' ', temp_text)
             prep_text = ''
@@ -84,13 +91,13 @@ class DataPreprocessor:
 
 
 
-    def __call__(self, df: pd.DataFrame) -> pd.DataFrame:
+    def __call__(self, df: pd.DataFrame, index_column: str, set_index=False) -> pd.DataFrame:
         self.dataframe = df
         new_texts, new_annotations = self.preprocess_text(df.text, df.extracted_part)
         
         self.dataframe.drop_duplicates(subset='id', inplace=True)
-        # self.dataframe = self.dataframe.set_index('id')
-
+        if set_index:
+            self.dataframe = self.dataframe.set_index(index_column)
         for i, idx in enumerate(self.dataframe.index):
             self.dataframe.loc[idx].text = new_texts[i]
             self.dataframe.loc[idx].extracted_part = new_annotations[i][0]
