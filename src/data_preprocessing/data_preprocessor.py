@@ -97,13 +97,13 @@ class DataPreprocessor:
 
 
 
-    def __call__(self, df: pd.DataFrame, index_column: str, set_index=False) -> pd.DataFrame:
+    def __call__(self, df: pd.DataFrame, set_index_to_id=False) -> pd.DataFrame:
         self.dataframe = df
         new_texts, new_annotations = self.preprocess_text(df.text, df.extracted_part)
         
         self.dataframe.drop_duplicates(subset='id', inplace=True)
-        if set_index:
-            self.dataframe = self.dataframe.set_index(index_column)
+        if set_index_to_id:
+            self.dataframe = self.dataframe.set_index('id')
         for i, idx in enumerate(self.dataframe.index):
             self.dataframe.loc[idx].text = new_texts[i]
             self.dataframe.loc[idx].extracted_part = new_annotations[i][0]
