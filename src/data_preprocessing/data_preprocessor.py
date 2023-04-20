@@ -20,12 +20,14 @@ class DataPreprocessor:
                  remove_punctuation=False,
                  lemmatize=False,
                  for_rnn=False,
-                 remove_stopwords=False):
+                 remove_stopwords=False,
+                 lower_case=False):
         self.lemmatizer = lemmatizer
         self.remove_punctuation = remove_punctuation
         self.lemmatize = lemmatize
         self.for_rnn = for_rnn
         self.remove_stopwords = remove_stopwords
+        self.lower_case = lower_case
       
     '''
     This is data preprocessing module. Calling this class on your dataset
@@ -38,7 +40,9 @@ class DataPreprocessor:
         new_texts = []
         new_annotations = []
         for i in tqdm(texts.index):
-            temp_text = texts[i].strip().replace('\n', ' ').lower().replace('ё', 'е')
+            temp_text = texts[i].strip().replace('\n', ' ').replace('ё', 'е')
+            if self.lower_case:
+                temp_text = temp_text.lower()
             if self.remove_punctuation:
                 temp_text = re.sub(r'[^\w\s]', ' ', temp_text)
             prep_text = ''
@@ -61,7 +65,9 @@ class DataPreprocessor:
             # print(annotations[i]['result'])      
             segments = []
             new_segment = {}
-            temp_segment = annotations[i]['text'][0].strip().replace('\n', ' ').lower()
+            temp_segment = annotations[i]['text'][0].strip().replace('\n', ' ').replace('ё', 'е')
+            if self.lower_case:
+                temp_segment = temp_segment.lower()
             if self.remove_punctuation:
                 temp_segment = re.sub(r'[^\w\s]', ' ', temp_segment)
             prep_segment = ''
