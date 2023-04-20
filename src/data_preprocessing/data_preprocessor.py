@@ -89,7 +89,7 @@ class DataPreprocessor:
         new_texts, new_annotations = self.preprocess_text(df.text, df.extracted_part)
         
         self.dataframe.drop_duplicates(subset='id', inplace=True)
-        self.dataframe = self.dataframe.set_index('id')
+        # self.dataframe = self.dataframe.set_index('id')
 
         for i, idx in enumerate(self.dataframe.index):
             self.dataframe.loc[idx].text = new_texts[i]
