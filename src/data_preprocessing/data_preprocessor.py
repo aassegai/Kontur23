@@ -12,8 +12,7 @@ from pymorphy2 import MorphAnalyzer
 
 morph_analyzer = MorphAnalyzer()
 stopwords_rus = stopwords.words('russian')
-punctuation_rus = ['«', '»', "''", '``', '„', '“', '..', '...', '—', '–', '…', '’', '№']
-stopwords_rus = set(stopwords_rus) | set(punctuation_rus)
+
 
 class DataPreprocessor:
     def __init__(self, lemmatizer=morph_analyzer,
@@ -47,7 +46,8 @@ class DataPreprocessor:
                 temp_text = re.sub(r'[^\w\s]', ' ', temp_text)
             prep_text = ''
             for word in temp_text.split():
-                if self.remove_stopwords and word not in stopwords_rus:  
+                if self.remove_stopwords:
+                    if word not in stopwords_rus:  
                         if self.lemmatize:
                             prep_text = prep_text + '' + self.lemmatizer.parse(word)[0].normal_form + ' '
                         else:
@@ -72,7 +72,8 @@ class DataPreprocessor:
                 temp_segment = re.sub(r'[^\w\s]', ' ', temp_segment)
             prep_segment = ''
             for word in temp_segment.split():
-                if self.remove_stopwords and word not in stopwords_rus:  
+                if self.remove_stopwords:
+                    if word not in stopwords_rus:  
                         if self.lemmatize:
                             prep_segment = prep_segment + '' + self.lemmatizer.parse(word)[0].normal_form + ' '
                         else:
