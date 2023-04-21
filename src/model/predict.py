@@ -5,7 +5,6 @@ def predict_entities(model, text, label):
     doc = model(text)
     ent_list = []
     ent_dict = {}
-    print(len(doc.ents))
     if len(doc.ents) == 0:
           ent_dict['answer_start'] = [0]
           ent_dict['answer_end'] = [0]
