@@ -25,4 +25,4 @@ def predict_entities(model, text, label):
                 ent_dict['text'] = ['']
             if ent_dict not in ent_list:
                 ent_list.append(ent_dict)
-    return ent_list
+    return ent_list[0]
